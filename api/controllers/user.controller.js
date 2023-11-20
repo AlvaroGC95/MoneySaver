@@ -1,38 +1,98 @@
-const User = require("../models/user.model");
+const User = require('../models/user.model');
+const bcrypt = require('bcryptjs');
 
-module.exports.create = (req, res, next) => {
-  User.create({
-    email: req.body.email,
-    password: req.body.password,
-    name: req.body.name,
-    avatar: req.file?.path,
-  })
-    .then((user) => {
-      res.status(201).json(user);
+module.exports.register = (req, res, next) => {
+  User.findOne({ email: req.body.email })
+    .then(user => {
+      if (user) {
+        return res.status(409).send({ message: 'Email already exists' });
+      } else {
+        const newUser = new User({
+          name: req.body.name,
+          email: req.body.email,
+          password: req.body.password,
+          avatar: req.file ? req.file.path : null,
+        });
+        return newUser.save();
+      }
     })
-    .catch(next);
+    .then(user => {
+      res.status(201).send({ message: 'User created', userId: user.id });
+    })
+    .catch(error => {
+      console.error('Error during the registration:', error);
+      res.status(500).send({ error: error.message });
+    });
 };
 
 module.exports.login = (req, res, next) => {
+  console.log('Login attempt for email:', req.body.email);
   User.findOne({ email: req.body.email })
-    .then((user) => {
-      if (user) {
-        user.checkPassword(req.body.password).then((match) => {
-          if (match) {
-            req.session.userId = user.id;
-            res.json(user);
-          } else {
-            res.status(401).json({ error: "unauthorized" });
-          }
-        });
-      } else {
-        res.status(401).json({ error: "unauthorized" });
+    .then(user => {
+      if (!user) {
+        console.log('No user found for email:', req.body.email);
+        return res.status(401).send({ message: 'Auth failed' });
       }
+      user.checkPassword(req.body.password)
+        .then(isMatch => {
+          if (isMatch) {
+            console.log('User authenticated:', user.email);
+            req.session.userId = user.id;
+            res.status(200).send({ message: 'Logged in successfully', userId: user.id });
+          } else {
+            console.log('Password does not match for user:', user.email);
+            return res.status(401).send({ message: 'Auth failed' });
+          }
+        })
+        .catch(err => {
+          console.error('Error during password comparison:', err);
+          return res.status(500).send({ message: 'An error occurred during the login process' });
+        });
     })
-    .catch(next);
+    .catch(err => {
+      console.error('Error during login for email:', req.body.email, err);
+      return res.status(500).send({ message: 'An error occurred during the login process' });
+    });
 };
 
-module.exports.logout = (req, res, next) => {
-  req.session.destroy();
-  res.status(204).send();
+module.exports.getProfile = (req, res, next) => {
+  console.log('Starting getProfile function');
+
+  const userId = req.session.userId;
+
+  console.log('User ID in session:', userId);
+
+  User.findById(userId)
+    .then(user => {
+      console.log('User found in the database:', user);
+
+      if (!user) {
+        console.log('No user found with ID:', userId);
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      console.log('Sending user profile data in the response');
+
+      res.json({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        avatar: user.avatar,
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Error fetching user profile' });
+    });
+};
+
+module.exports.logout = (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).send({ message: 'Could not log out, please try again' });
+    } else {
+      res.clearCookie('connect.sid');
+      res.status(200).send({ message: 'Logged out successfully' });
+    }
+  });
 };

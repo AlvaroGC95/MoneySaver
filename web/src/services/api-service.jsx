@@ -18,27 +18,32 @@ api.interceptors.response.use(
     }
   }
 );
-//User
-export function createUser(body) {
+
+// Usuarios
+export function createUser(data) {
   const formData = new FormData();
 
-  formData.append("name", body.name);
-  formData.append("email", body.email);
-  formData.append("password", body.password);
+  Object.keys(data).forEach(key => {
+    if (key === 'avatar' && data.avatar) {
+      formData.append("avatar", data.avatar[0]);
+    } else {
+      formData.append(key, data[key]);
+    }
+  });
 
-  if (body.avatar) {
-    formData.append("avatar", body.avatar[0]);
-  }
-
-  return api.post("/users", formData);
+  return api.post("/register", formData);
 }
 
-export function login(data){
-  return api.post("/login", data)
+export function login(data) {
+  return api.post("/login", data);
 }
 
-export function logoutApi(){
-  return api.post("/logout")
+export function getUserProfile() {
+  return api.get("/profile");
+}
+
+export function logoutUser() {
+  return api.post("/logout");
 }
   //SavingsGoal
   export function createSavingsGoal (data)  {
