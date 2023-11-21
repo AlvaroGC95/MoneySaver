@@ -21,7 +21,7 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
 
     try {
       // Envia la meta de ahorro al servidor
-      const response = await fetch('cd/savings-goals', {
+      const response = await fetch('/savings-goals', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
