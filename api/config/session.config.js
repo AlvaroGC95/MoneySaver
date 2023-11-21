@@ -13,6 +13,6 @@ module.exports.session = expressSession({
   }),
   cookie: {
     httpOnly: true,
-    secure: process.env.SESSION_SECURE === "true",
+    secure: process.env.SESSION_SECURE === "false",
   },
 });
