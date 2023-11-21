@@ -1,9 +1,10 @@
+const { populate } = require('../models/expenseCategory.model');
 const SavingsGoal = require('../models/savingGoal.model');
 
 module.exports.createSavingsGoal = (req, res, next) => {
   const { name, targetAmount, currentAmount, deadline } = req.body;
-
-  const newSavingsGoal = new SavingsGoal({ name, targetAmount, currentAmount, deadline });
+  const userId = req.session.userId
+  const newSavingsGoal = new SavingsGoal({ name, targetAmount, currentAmount, deadline, user: userId });
 
   newSavingsGoal.save()
     .then(() => {
@@ -15,7 +16,8 @@ module.exports.createSavingsGoal = (req, res, next) => {
 };
 
 module.exports.getSavingsGoals = (req, res, next) => {
-  SavingsGoal.find()
+  SavingsGoal.find("user")
+    populate("user")
     .then(goals => {
       res.json(goals);
     })

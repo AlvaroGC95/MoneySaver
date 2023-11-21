@@ -4,13 +4,33 @@ const api = axios.create({
   withCredentials: true,
   baseURL: import.meta.env.REACT_APP_BASE_API_URL || "http://localhost:3000/v1",
 });
-
 api.interceptors.response.use(
   response => response.data,
   error => {
     console.log("Interceptor de error Axios activado", error);
     if (error.response && error.response.status === 401 && window.location.pathname !== "/login") {
       console.log("Redirigiendo a /login debido a error 401");
+
+      // Obtener la cadena de datos del usuario desde localStorage
+      const userDataString = localStorage.getItem("user");
+
+      // Verificar si la cadena de datos no es nula ni indefinida
+      if (userDataString !== null && userDataString !== undefined) {
+        try {
+          // Intentar analizar los datos del usuario
+          const userData = JSON.parse(userDataString);
+
+          // Ahora puedes utilizar userData en tu lógica
+          console.log("Datos del usuario:", userData);
+        } catch (error) {
+          // Manejar el caso en que los datos no son JSON válido
+          console.error("Error al analizar los datos del usuario:", error);
+        }
+      } else {
+        // Manejar el caso en que "user" no existe en localStorage
+        console.log("No se encontraron datos de usuario en localStorage");
+      }
+
       localStorage.removeItem("user");
       window.location.assign("/login");
     } else {

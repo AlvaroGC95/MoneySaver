@@ -1,22 +1,77 @@
-import React from 'react';
-import { Navbar, Nav, Container } from 'react-bootstrap';
+import { Icon } from "@iconify/react";
+import { useAuthContext } from "../contexts/auth-context";
+import { logoutUser } from "../services/api-service";
+import { Link } from "react-router-dom";
 
-const NavBar = () => {
- return (
-    <Navbar bg="dark" variant="dark" expand="lg" fixed="top">
-      <Container>
-        <Navbar.Brand href="#home">Money Saver</Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Features</Nav.Link>
-            <Nav.Link href="#pricing">Pricing</Nav.Link>
-          </Nav>
-        </Navbar.Collapse>
-      </Container>
-    </Navbar>
- );
-};
+function NavBar() {
+  const { user, onLogout } = useAuthContext();
+
+  function logout() {
+    logoutUser().then(() => {
+      onLogout();
+    });
+  }
+
+  return (
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div className="container-fluid">
+        <Link to="/" className="navbar-brand">
+          <strong>React Task Manager</strong>
+        </Link>
+
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+
+        <div className="collapse navbar-collapse" id="navbarNav">
+          <ul className="navbar-nav ms-auto">
+            {user ? (
+              // Mostrar estos elementos si el usuario ha iniciado sesión
+              <li className="nav-item">
+                <div className="d-flex">
+                  {user.avatar && (
+                    <img
+                      src={user.avatar}
+                      alt="avatar"
+                      className="rounded-circle me-2"
+                      style={{ width: "30px" }}
+                    />
+                  )}
+                  <button
+                    onClick={logout}
+                    className="btn btn-sm btn-danger d-flex align-items-center"
+                  >
+                    <Icon className="me-1" icon="ant-design:logout-outlined" />
+                    Logout
+                  </button>
+                </div>
+              </li>
+            ) : (
+              // Mostrar estos elementos si el usuario no ha iniciado sesión
+              <li className="nav-item">
+                <div className="d-flex">
+                  <Link to="/login" className="btn btn-sm btn-primary me-2">
+                    Login
+                  </Link>
+                  <Link to="/register" className="btn btn-sm btn-success">
+                    Register
+                  </Link>
+                </div>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+}
 
 export default NavBar;

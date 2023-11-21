@@ -7,8 +7,7 @@ const UserDashboard = () => {
   const { user, onLogout } = useAuthContext();
 
   const handleLogout = () => {
-    // Lógica para cerrar sesión, por ejemplo, limpiar el token, etc.
-    // Asume que `onLogout` manejará la lógica de cerrar sesión en el contexto.
+    localStorage.removeItem('user');
     onLogout();
   };
 

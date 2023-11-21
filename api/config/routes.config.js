@@ -34,7 +34,7 @@ router.delete('/expenses/:id', auth.isAuthenticated, expenseController.deleteExp
 router.post('/savings-goals', auth.isAuthenticated, savingsGoalController.createSavingsGoal);
 router.get('/savings-goals', auth.isAuthenticated, savingsGoalController.getSavingsGoals);
 router.get('/savings-goals/:id', auth.isAuthenticated, savingsGoalController.getSavingsGoalById);
-router.put('/savings-goals/:id', auth.isAuthenticated, savingsGoalController.updateSavingsGoal);
+router.put('/savings-goals/:id',  auth.isAuthenticated, savingsGoalController.updateSavingsGoal);
 router.delete('/savings-goals/:id', auth.isAuthenticated, savingsGoalController.deleteSavingsGoal);
 
 module.exports = router;
