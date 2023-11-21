@@ -16,7 +16,7 @@ function NavBar() {
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
       <div className="container-fluid">
         <Link to="/" className="navbar-brand">
-          <strong>React Task Manager</strong>
+          <strong>Money Saver</strong>
         </Link>
 
         <button
@@ -61,7 +61,7 @@ function NavBar() {
                   <Link to="/login" className="btn btn-sm btn-primary me-2">
                     Login
                   </Link>
-                  <Link to="/register" className="btn btn-sm btn-success">
+                  <Link to="/signup" className="btn btn-sm btn-success">
                     Register
                   </Link>
                 </div>

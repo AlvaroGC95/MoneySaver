@@ -25,3 +25,6 @@ const ExpenseItem = ({ expense, onEdit, onDelete }) => {
 };
 
 export default ExpenseItem;
+
+
+

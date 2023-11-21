@@ -32,3 +32,6 @@ const ExpenseList = ({ category }) => {
 };
 
 export default ExpenseList;
+
+
+

@@ -8,7 +8,7 @@ import Login from "./pages/login";
 import { Authenticated, Unauthenticated } from "./components/authenticated";
 import Signup from "./pages/signup";
 import UserDashboard from "./pages/userDashboard";
-import Expense from "./pages/expense"
+import ExpensePage from "./pages/expense"
 
 const App = () => {
  
@@ -16,12 +16,12 @@ const App = () => {
       <div className="App">
       <Navbar />
       <Routes>
-            <Route path="/expense" element = { <Authenticated> <Expense /> </Authenticated>} />
-            <Route path="/userDashboard" element = { <Authenticated> <UserDashboard /> </Authenticated>} />
+            <Route path="/expense" element = { <Authenticated> <ExpensePage /> </Authenticated>} />
             <Route path ="/" element= {<HomePage />} />
             <Route path="/login" element= {<Unauthenticated> <Login /> </Unauthenticated> } />
             <Route path="/signup" element={<Unauthenticated> <Signup /> </Unauthenticated> } />
             <Route path = "/savingGoal" element = {<SavingGoalPage/>} />
+            <Route path="/userDashboard" element = { <Authenticated> <UserDashboard /> </Authenticated>} />
           </Routes>
      
       </div>

@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { login } from "../services/api-service";
 import { useAuthContext } from "../contexts/auth-context";
 import { Link, useNavigate } from "react-router-dom";
+import "./css/login.css"
 
 function LoginPage() {
   const { register, handleSubmit } = useForm();
