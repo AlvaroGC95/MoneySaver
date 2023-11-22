@@ -22,6 +22,7 @@ app.use(session.session);
 const api = require('./config/routes.config');
 app.use('/v1', api);
 
+
 app.use((req, res, next) => next(createError(404, "Route not found")));
 
 app.use((error, req, res, next) => {

@@ -24,7 +24,7 @@ module.exports.getExpenseById = (req, res, next) => {
       res.status(200).json({ expense });
     })
     .catch(error => {
-      next.status(500).json({ message: error.message });
+      res.status(500).json({ message: error.message });
     });
 };
 

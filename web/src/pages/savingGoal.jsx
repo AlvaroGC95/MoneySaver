@@ -1,28 +1,43 @@
-// SavingGoalPage.js
-import React from 'react';
+import React, { useState } from 'react';
+import { Card, Form, Button, Alert } from 'react-bootstrap';
 import SavingGoalForm from '../components/savingGoalForm';
 
 const SavingGoalPage = () => {
+  const [selectedSavingsGoal] = useState(null);
+  const [error, setError] = useState('');
+
+  const onCreateSavingsGoal = (newSavingsGoal) => {
+    console.log('Nueva meta de ahorro creada:', newSavingsGoal);
+  };
+
+  const onUpdateSavingsGoal = (updatedSavingsGoal) => {
+    console.log('Meta de ahorro actualizada:', updatedSavingsGoal);
+  };
+
+  const onDeleteSavingsGoal = (deletedSavingsGoal) => {
+    console.log('Meta de ahorro eliminada:', deletedSavingsGoal);
+  };
+
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-lg-6 mb-4">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title">Metas de Ahorro</h2>
-              {/* Aquí podrías mostrar la lista de metas existentes si lo deseas */}
-            </div>
+    <div className="min-h-screen d-flex align-items-center justify-content-center">
+      <Card style={{ width: '24rem' }} className="p-4">
+        <Card.Body>
+          <h2 className="text-center mb-4">SavingsGoal Details</h2>
+          <SavingGoalForm
+            savingsGoal={selectedSavingsGoal}
+            onCreateSavingsGoal={onCreateSavingsGoal}
+            onUpdateSavingsGoal={onUpdateSavingsGoal}
+            onDeleteSavingsGoal={onDeleteSavingsGoal}
+          />
+
+          {error && <Alert variant="danger" className="mt-3">{error}</Alert>}
+
+          <div className="text-center mt-3">
+            <p>
+            </p>
           </div>
-        </div>
-        <div className="col-lg-6">
-          <div className="card">
-            <div className="card-body">
-              <h2 className="card-title">Crear Nueva Meta de Ahorro</h2>
-              <SavingGoalForm />
-            </div>
-          </div>
-        </div>
-      </div>
+        </Card.Body>
+      </Card>
     </div>
   );
 };

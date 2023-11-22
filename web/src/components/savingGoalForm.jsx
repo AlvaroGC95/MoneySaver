@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { createSavingsGoal, updateSavingsGoal, deleteSavingsGoal } from '../services/api-service';
 
-const SavingGoalForm = ({ onCreateSavingsGoal }) => {
+const SavingGoalForm = ({ savingsGoal, onCreateSavingsGoal, onUpdateSavingsGoal, onDeleteSavingsGoal }) => {
   const [savingGoalData, setSavingGoalData] = useState({
     name: '',
     targetAmount: '',
@@ -8,44 +9,41 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
     description: '',
   });
 
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setSavingGoalData({
-      ...savingGoalData,
-      [name]: value,
-    });
-  };
+  useEffect(() => {
+    if (savingsGoal) {
+      setSavingGoalData({
+        name: savingsGoal.name,
+        targetAmount: savingsGoal.targetAmount,
+        deadline: savingsGoal.deadline,
+        description: savingsGoal.description,
+      });
+    }
+  }, [savingsGoal]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
-      // Envia la meta de ahorro al servidor
-      const response = await fetch('/savings-goals', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(savingGoalData),
+      if (savingsGoal) {
+        const updatedSavingsGoal = await updateSavingsGoal(savingsGoal.id, savingGoalData);
+        onUpdateSavingsGoal(updatedSavingsGoal);
+        console.log('Savings goal updated:', updatedSavingsGoal);
+      } else {
+        const newSavingsGoal = await createSavingsGoal(savingGoalData);
+        onCreateSavingsGoal(newSavingsGoal.goal);
+        console.log('Savings goal created:', newSavingsGoal.goal);
+      }
+
+      setSavingGoalData({
+        name: '',
+        targetAmount: '',
+        deadline: '',
+        description: '',
       });
 
-      if (response.ok) {
-        // Maneja la respuesta del servidor, por ejemplo, actualizando el estado o redirigiendo
-        const newSavingsGoal = await response.json();
-        onCreateSavingsGoal(newSavingsGoal.goal);
-        console.log('Meta de ahorro creada:', newSavingsGoal.goal);
-        // Limpia el formulario
-        setSavingGoalData({
-          name: '',
-          targetAmount: '',
-          deadline: '',
-          description: '',
-        });
-      } else {
-        console.error('Error al crear la meta de ahorro');
-      }
+      
     } catch (error) {
-      console.error('Error de red:', error);
+      console.error('Error handling form submission:', error.message);
     }
   };
 
@@ -57,7 +55,7 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
           type="text"
           name="name"
           value={savingGoalData.name}
-          onChange={handleInputChange}
+          onChange={(event) => setSavingGoalData({ ...savingGoalData, name: event.target.value })}
           required
         />
       </label>
@@ -68,7 +66,7 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
           type="number"
           name="targetAmount"
           value={savingGoalData.targetAmount}
-          onChange={handleInputChange}
+          onChange={(event) => setSavingGoalData({ ...savingGoalData, targetAmount: event.target.value })}
           required
         />
       </label>
@@ -79,7 +77,7 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
           type="date"
           name="deadline"
           value={savingGoalData.deadline}
-          onChange={handleInputChange}
+          onChange={(event) => setSavingGoalData({ ...savingGoalData, deadline: event.target.value })}
           required
         />
       </label>
@@ -89,13 +87,18 @@ const SavingGoalForm = ({ onCreateSavingsGoal }) => {
         <textarea
           name="description"
           value={savingGoalData.description}
-          onChange={handleInputChange}
+          onChange={(event) => setSavingGoalData({ ...savingGoalData, description: event.target.value })}
         />
       </label>
 
-      <button type="submit">Crear Meta de Ahorro</button>
+      <button type="submit">{savingsGoal ? 'Update' : 'Create'} Savings Goal</button>
+      {savingsGoal && (
+        <button type="button" onClick={() => onDeleteSavingsGoal(savingsGoal.id)}>
+          Delete Savings Goal
+        </button>
+      )}
     </form>
   );
 };
-  
+
 export default SavingGoalForm;

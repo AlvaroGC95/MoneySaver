@@ -21,7 +21,7 @@ const UserDashboard = () => {
       <Row className="mt-3">
         <Col>
           <h4>Tu panel de control</h4>
-          {/* Aquí puedes agregar componentes o enlaces a otras secciones de la aplicación */}
+          {/* Enlace a la ruta "/expenses" */}
           <Link to="/expenses">
             <Button variant="primary">Ver Gastos</Button>
           </Link>

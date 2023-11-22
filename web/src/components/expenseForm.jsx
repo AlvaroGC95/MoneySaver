@@ -6,15 +6,12 @@ const ExpenseForm = ({ onSubmit, expenseToEdit }) => {
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm();
   const [categories, setCategories] = useState([]);
 
-  // Puedes obtener las categorías de tu servicio/api
   useEffect(() => {
-    // Aquí obtienes las categorías y las estableces en el estado
-    // Ejemplo ficticio, reemplázalo con la lógica de tu aplicación
+    
     const fetchedCategories = ['Comida', 'Transporte', 'Entretenimiento'];
     setCategories(fetchedCategories);
   }, []);
 
-  // Si hay un gasto para editar, establece sus valores en el formulario
   useEffect(() => {
     if (expenseToEdit) {
       setValue('description', expenseToEdit.description);
@@ -25,9 +22,7 @@ const ExpenseForm = ({ onSubmit, expenseToEdit }) => {
   }, [expenseToEdit, setValue]);
 
   const handleFormSubmit = (data) => {
-    // Envía los datos del formulario al componente padre
     onSubmit(data);
-    // Limpia el formulario después de enviar
     reset();
   };
 

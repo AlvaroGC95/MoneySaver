@@ -40,7 +40,7 @@ api.interceptors.response.use(
 );
 
 // Usuarios
-export function createUser(data) {
+export function registerUser(data) {
   const formData = new FormData();
 
   Object.keys(data).forEach(key => {
@@ -74,47 +74,55 @@ export function logoutUser() {
       return api.get('/savings-goals')
   };
 
-  export function getSavingsGoalById (id)  {
-      return api.get(`/savings-goals/${id}`)
+  export function getSavingsGoalById (userId)  {
+      return api.get(`/savings-goals/${userId}`)
   };
 
-  export function updateSavingsGoal (id, data) {
-      return api.put(`/savings-goals/${id}`, data)
+  export function updateSavingsGoal (userId, data) {
+      return api.put(`/savings-goals/${userId}`, data)
   };
 
-  export function deleteSavingsGoal  (id)  {
-      return api.delete(`/savings-goals/${id}`)
+  export function deleteSavingsGoal  (userId)  {
+      return api.delete(`/savings-goals/${userId}`)
   };
   //Expense
-  export function createExpense (data){
-      return api.post('/expense', data)
+  export function createExpenses (data){
+      return api.post('/expenses', data)
   };
-  export function getExpenseById (id){
-    return api.get(`/expense/ ${id}`)
+  export function getExpensesById (UserId){
+    return api.get(`/expenses/ ${UserId}`)
   };
-  export function updateExpense (id, data){
-    return api.put(`/expense/${id}`, data)
+  export function updateExpenses (UserId, data){
+    return api.put(`/expenses/${UserId}`, data)
   };
-  export function deleteExpense (id){
-    return api.delete(`/expense/${id}`)
+  export function deleteExpenses (userId){
+    return api.delete(`/expenses/${userId}`)
   };
   export function getExpensesByCategory(){
-    return api.get ('/expense')
+    return api.get ('/expenses')
   };
 
   //Expense Category
   export function createExpenseCategories (data){
     return api.post('/expense-category', data)
 };
-  export function getExpenseCategoryforyById (id){
-    return api.get(`/expense-category/ ${id}`)
+  export function getExpenseCategoryforyById (userId){
+    return api.get(`/expense-category/${userId}`)
 };
-  export function updateExpenseCategory (id, data){
-    return api.put(`/expense-category/${id}`, data)
+  export function updateExpenseCategory (userId, data){
+    return api.put(`/expense-category/${userId}`, data)
 };
-  export function deleteExpenseCategory (id){
-    return api.delete(`/expense-category/${id}`)
+  export function deleteExpenseCategory (userId){
+    return api.delete(`/expense-category/${userId}`)
 };
 export function getExpensesCategory(){
   return api.get ('/expense-category')
 };
+
+//Incomes
+export function createIncomes (data){
+  return api.post ('/income', data)
+}
+export function getIncomes (){
+  return api.get ('/income')
+}
